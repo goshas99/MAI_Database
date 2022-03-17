@@ -43,5 +43,3 @@ if __name__ == "__main__":
     bot.remove_webhook()
     bot.set_webhook(url=APP_URL)
     server.run(host="0.0.0.0", port=(os.environ.get("PORT", 5000)))
-
-bot.polling(none_stop=True, interval=0)
