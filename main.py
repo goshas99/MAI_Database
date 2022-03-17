@@ -31,7 +31,7 @@ def start(message):
         db_connection.commit()
 
 
-@bot.message_handler(commands=["text"])
+@bot.message_handler(content_types=["text"])
 def get_text_message(message):
     if message.text == "Привет":
         bot.send_message(message.from_user.id, 'Как тебя зовут?')
