@@ -9,6 +9,9 @@ bot = telebot.TeleBot(BOT_TOKEN)
 server = Flask(__name__)
 logger = telebot.logger
 logger.setLevel(logging.DEBUG)
+Name = ' '
+Surname = ' '
+Age = ' '
 
 db_connection = psycopg2.connect(DB_URI, sslmode="require")
 db_object = db_connection.cursor()
@@ -26,6 +29,49 @@ def start(message):
     if not result:
         db_object.execute("INSERT INTO users(id, username, messages) VALUES (%s, %s, %s)", (id, username, 0))
         db_connection.commit()
+
+
+@bot.message_handler(commands=["text"])
+def get_text_message(message):
+    if message.text == "Привет":
+        bot.send_message(message.from_user.id, 'Как тебя зовут?')
+        bot.register_next_step_handler(message, get_name)
+    elif message.text == "/help":
+        bot.send_message(message.from_user.id, "Напиши Привет")
+    else:
+        bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
+
+    db_object.execute(f"SELECT id FROM info_for_users WHERE id = {id}")
+    result = db_object.fetchone()  # Возвращает в кач-ве рез-та одну строчку с рез-том запроса
+
+    if not result:
+        db_object.execute("INSERT INTO info_for_users(id, name) VALUES (%s, %s)", (id, result))
+        db_connection.commit()
+
+
+def get_name(message):
+    global Name
+    Name = message.text
+    bot.send_message(message.from_user.id, 'Какая у тебя фамилия?')
+    bot.register_next_step_handler(message, get_surname)
+
+    db_object.execute(f"SELECT id FROM info_for_users WHERE id = {id}")
+    result = db_object.fetchone()  # Возвращает в кач-ве рез-та одну строчку с рез-том запроса
+
+    if not result:
+        db_object.execute("INSERT INTO info_for_users(id,surname) VALUES (%s, %s)", (id, result))
+        db_connection.commit()
+
+
+def get_surname(message):
+    global Surname
+    Surname = message.text
+    bot.send_message(message.from_user.id, 'Сколько тебе лет?')
+    bot.register_next_step_handler(message, get_age)
+
+
+def get_age(message):
+    pass
 
 
 @server.route(f"/{BOT_TOKEN}", methods=["POST"])  # Перенаправление информации с сервера "HIROKU" в бота
