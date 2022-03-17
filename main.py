@@ -24,7 +24,8 @@ def start(message):
     result = db_object.fetchone()  # Возвращает в кач-ве рез-та одну строчку с рез-том запроса
 
     if not result:
-        db_object.execute("INSERT INTO users(id, username, messages) VALUES (%s, %s, %s)", (id, username, 0)),
+        db_object.execute("INSERT INTO users(id, username, messages) VALUES (%s, %s, %s)", (id, username, 0))
+        db_connection.commit()
 
 
 @server.route(f"/{BOT_TOKEN}", methods=["POST"])  # Перенаправление информации с сервера "HIROKU" в бота
