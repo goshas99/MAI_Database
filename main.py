@@ -19,6 +19,11 @@ def update_messages_count(user_id):
     db_connection.commit()
 
 
+def fullname(user_id):
+    db_object.execute("INSERT INTO info_for_users(id, Name) VALUES (%s,%s,%s)", (id, Name, Surname, 0))
+    db_connection.commit()
+
+
 @bot.message_handler(commands=["start"])
 def start(message):
     user_id = message.from_user.id
@@ -39,6 +44,19 @@ def start(message):
 def message_from_users(message):
     user_id = message.from_user.id
     update_messages_count(user_id)
+
+
+@bot.message_handler(content_types=['text'])
+def get_text_message(message):
+    if message.text == "Привет":
+        bot.send_message(message.from_user.id, 'Как тебя зовут?')
+        # bot.register_next_step_handler(message, get_name)
+    elif message.text == "/help":
+        bot.send_message(message.from_user.id, "Напиши Привет")
+    else:
+        bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
+
+    fullname(user_id)
 
 
 @server.route(f"/{BOT_TOKEN}", methods=["POST"])  # Перенаправление информации с сервера "HIROKU" в бота
