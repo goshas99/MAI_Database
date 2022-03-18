@@ -9,9 +9,6 @@ bot = telebot.TeleBot(BOT_TOKEN)
 server = Flask(__name__)
 logger = telebot.logger
 logger.setLevel(logging.DEBUG)
-Name = ' '
-Surname = ' '
-Age = ' '
 
 db_connection = psycopg2.connect(DB_URI, sslmode="require")
 db_object = db_connection.cursor()
@@ -29,6 +26,27 @@ def start(message):
     if not result:
         db_object.execute("INSERT INTO users(id, username, messages) VALUES (%s, %s, %s)", (id, username, 0))
         db_connection.commit()
+
+
+@bot.message_handler(content_types=['text'])
+def get_text_message(message):
+    if message.text == "Привет":
+        bot.send_message(message.from_user.id, 'Как тебя зовут?')
+        bot.register_next_step_handler(message, get_name)
+    elif message.text == "/help":
+        bot.send_message(message.from_user.id, "Напиши Привет")
+    else:
+        bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
+
+    db_object.execute(f"SELECT id FROM info_for_users WHERE id = {id}")
+    result = db_object.fetchone()  # Возвращает в кач-ве рез-та одну строчку с рез-том запроса
+
+    if not result:
+        db_object.execute("INSERT INTO info_for_users(id, Name) VALUES (%s, %s)", (id, Name))
+        db_connection.commit()
+
+
+bot.polling(none_stop=True, interval=0)
 
 
 @server.route(f"/{BOT_TOKEN}", methods=["POST"])  # Перенаправление информации с сервера "HIROKU" в бота
