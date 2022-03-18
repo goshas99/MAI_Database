@@ -36,7 +36,7 @@ def start(message):
 
 
 @bot.message_handler(func=lambda message: True, content_types=["text"])
-def message_from_users():
+def message_from_users(message):
     user_id = message_from_user.id
     update_messages_count(user_id)
 
