@@ -46,9 +46,6 @@ def get_text_message(message):
         db_connection.commit()
 
 
-bot.polling(none_stop=True, interval=0)
-
-
 @server.route(f"/{BOT_TOKEN}", methods=["POST"])  # Перенаправление информации с сервера "HIROKU" в бота
 def redirect_message():
     json_string = request.get_data().decode("utf-8")
@@ -56,6 +53,8 @@ def redirect_message():
     bot.process_new_updates([update])
     return "!", 200
 
+
+bot.polling(none_stop=True, interval=0)
 
 if __name__ == "__main__":
     bot.remove_webhook()
