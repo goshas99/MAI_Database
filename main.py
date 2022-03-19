@@ -15,7 +15,7 @@ db_object = db_connection.cursor()
 
 
 def update_messages_count(user_id):
-    db_object.execute(f'UPDATE users SET messages = messages + 1 WHERE id = {user_id}')
+    db_object.execute(f"UPDATE users SET messages = messages + 1 WHERE id = {user_id}")
     db_connection.commit()
 
 
@@ -25,11 +25,11 @@ def start(message):
     username = message.from_user.username
     bot.reply_to(message, f'Привет, {username}!')
 
-    db_object.execute(f"SELECT id FROM users WHERE id = {id}")
+    db_object.execute(f"SELECT id FROM users WHERE id = {user_id}")
     result = db_object.fetchone()  # Возвращает в кач-ве рез-та одну строчку с рез-том запроса
 
     if not result:
-        db_object.execute("INSERT INTO users(id, username, messages) VALUES (%s, %s, %s)", (id, username, 0))
+        db_object.execute("INSERT INTO users(id, username, messages) VALUES (%s, %s, %s)", (user_id, username, 0))
         db_connection.commit()
 
     update_messages_count(user_id)
