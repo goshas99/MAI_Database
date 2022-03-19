@@ -39,16 +39,17 @@ def start(message):
 def message_from_users(message):
     user_id = message.from_user.id
     update_messages_count(user_id)
+    if message.from_user == "Сколько?":
+        how_many_message(message)
 
 
 @bot.message_handler(func=lambda message: True, content_types=["text"])
 def how_many_message(message):
     user_id = message.from_user.id
-    if message.text == "Сколько у меня сообщений?":
-        db_object.execute(f"SELECT messages FROM users WHERE id = {user_id}")
-        res = db_object.fetchall()
-        db_connection.commit()
-        bot.send_message(message.from_user.user_id, f"Вы написали : {res} сообщений")
+    db_object.execute(f"SELECT messages FROM users WHERE id = {user_id}")
+    res = db_object.fetchone()
+    db_connection.commit()
+    bot.send_message(message.from_user.user_id, f"Вы написали : {res} сообщений")
 
 
 @server.route(f"/{BOT_TOKEN}", methods=["POST"])  # Перенаправление информации с сервера "HIROKU" в бота
