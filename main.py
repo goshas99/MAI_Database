@@ -41,6 +41,15 @@ def message_from_users(message):
     update_messages_count(user_id)
 
 
+@bot.message_handler(func=lambda message: True, content_types=["text"])
+def how_many_message(message):
+    user_id = message.from_user.id
+    if message == "Сколько у меня сообщений?":
+        res = db_object.execute(f"SELECT messages FROM users WHERE id = {user_id}")
+        db_connection.commit()
+        bot.send_message(message.from_user.user_id, f"Вы написали : {res} сообщений")
+
+
 @server.route(f"/{BOT_TOKEN}", methods=["POST"])  # Перенаправление информации с сервера "HIROKU" в бота
 def redirect_message():
     json_string = request.get_data().decode("utf-8")
