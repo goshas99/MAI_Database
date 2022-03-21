@@ -5,6 +5,7 @@ import psycopg2
 from config import *
 from flask import Flask, request
 from telebot import types
+from aiogram.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
 bot = telebot.TeleBot(BOT_TOKEN)
 server = Flask(__name__)
@@ -22,12 +23,13 @@ def update_messages_count(user_id):
 
 @bot.message_handler(commands=["start"])
 def start(message):
+    button_hi = KeyboardButton('Привет! 👋')
+
+    greet_kb = ReplyKeyboardMarkup()
+    greet_kb.add(button_hi)
     user_id = message.from_user.id
     username = message.from_user.username
     bot.reply_to(message, f'Привет, {username}!')
-    markup = types.InLineKeyboardMarkup()
-    button1 = types.InlineKeyboardButton("Руководство по ипользованию")
-    markup.add(button1)
 
     db_object.execute(f"SELECT id FROM users WHERE id = {user_id}")
     result = db_object.fetchone()  # Возвращает в кач-ве рез-та одну строчку с рез-том запроса
