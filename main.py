@@ -23,10 +23,6 @@ def update_messages_count(user_id):
 
 @bot.message_handler(commands=["start"])
 def start(message):
-    button_hi = KeyboardButton('Привет! 👋')
-
-    greet_kb = ReplyKeyboardMarkup()
-    greet_kb.add(button_hi)
     user_id = message.from_user.id
     username = message.from_user.username
     bot.reply_to(message, f'Привет, {username}!')
