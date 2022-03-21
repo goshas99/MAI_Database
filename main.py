@@ -25,6 +25,9 @@ def start(message):
     user_id = message.from_user.id
     username = message.from_user.username
     bot.reply_to(message, f'Привет, {username}!')
+    markup = types.InLineKeyboardMarkup()
+    button1 = types.InlineKeyboardButton("Руководство по ипользованию")
+    markup.add(button1)
 
     db_object.execute(f"SELECT id FROM users WHERE id = {user_id}")
     result = db_object.fetchone()  # Возвращает в кач-ве рез-та одну строчку с рез-том запроса
@@ -34,15 +37,6 @@ def start(message):
         db_connection.commit()
 
     update_messages_count(user_id)
-
-
-def button(m, res=False):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    item1 = types.KeyboardButton("Начало работы")
-    markup.add(item1)
-    bot.send_message(m.chat.id, "Нажми \nкнопку, для того, чтобы получить инструкции по работе с ботом",
-                     reply_markup=markup)
-    bot.polling(none_stop=True, interval=0)
 
 
 @bot.message_handler(func=lambda message: True, content_types=["text"])
