@@ -5,7 +5,6 @@ import psycopg2
 from config import *
 from flask import Flask, request
 from telebot import types
-from aiogram.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
 bot = telebot.TeleBot(BOT_TOKEN)
 server = Flask(__name__)
