@@ -24,7 +24,7 @@ def update_messages_count(user_id):
 def start(message):
     user_id = message.from_user.id
     username = message.from_user.username
-    bot.reply_to(message, f'Привет, {username}!')
+    bot.reply_to(message, f'Привет, {username}, для получения инструкции нажмите /help')
 
     db_object.execute(f"SELECT id FROM users WHERE id = {user_id}")
     result = db_object.fetchone()  # Возвращает в кач-ве рез-та одну строчку с рез-том запроса
@@ -34,6 +34,12 @@ def start(message):
         db_connection.commit()
 
     update_messages_count(user_id)
+
+
+@bot.message_handler(commands=["help"])
+def start(message):
+    user_id = message.from_user.id
+    bot.reply_to((message, "КАКАЯ-ТО ПОЛЕЗНАЯ ИНФОРМАЦИЯ"))
 
 
 @bot.message_handler(func=lambda message: True, content_types=["text"])
