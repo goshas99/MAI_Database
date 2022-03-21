@@ -4,6 +4,7 @@ import logging
 import psycopg2
 from config import *
 from flask import Flask, request
+from telebot import types
 
 bot = telebot.TeleBot(BOT_TOKEN)
 server = Flask(__name__)
@@ -35,21 +36,18 @@ def start(message):
     update_messages_count(user_id)
 
 
+def button(m, res=False):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item1 = types.KeyboardButton("Начало работы")
+    markup.add(item1)
+    bot.send_message(m.chat.id, "Нажми \nкнопку, для того, чтобы получить инструкции по работе с ботом",
+                     reply_markup=markup)
+
+
 @bot.message_handler(func=lambda message: True, content_types=["text"])
 def message_from_users(message):
     user_id = message.from_user.id
     update_messages_count(user_id)
-    if message.from_user == "Сколько?":
-        how_many_message(message)
-
-
-@bot.message_handler(func=lambda message: True, content_types=["text"])
-def how_many_message(message):
-    user_id = message.from_user.id
-    db_object.execute(f"SELECT messages FROM users WHERE id = {user_id}")
-    res = db_object.fetchone()
-    db_connection.commit()
-    bot.send_message(message.from_user.user_id, f"Вы написали : {res} сообщений")
 
 
 @server.route(f"/{BOT_TOKEN}", methods=["POST"])  # Перенаправление информации с сервера "HIROKU" в бота
