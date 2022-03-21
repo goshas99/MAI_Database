@@ -42,6 +42,7 @@ def button(m, res=False):
     markup.add(item1)
     bot.send_message(m.chat.id, "Нажми \nкнопку, для того, чтобы получить инструкции по работе с ботом",
                      reply_markup=markup)
+    bot.polling(none_stop=True, interval=0)
 
 
 @bot.message_handler(func=lambda message: True, content_types=["text"])
