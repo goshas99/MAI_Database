@@ -43,6 +43,25 @@ def _help_(message):
     update_messages_count(user_id)
 
 
+@bot.message_handler(commands="go")
+def start_auth(message):
+    msg = bot.send_message(message.chat.id, 'Введите свой логин и пароль для доступа к БД')
+    bot.register_next_step_handler(msg, auth)
+
+
+def auth(message):
+    data = message.text.split()
+    check = db_object.Auth_information({
+        'Login': str(data['Login']),
+        'Password': str(data['Password'])
+    })
+    if check is None:
+        bot.send_message(message.chat.id, r'Неправильно введен логин\пароль')
+    else:
+        msg = bot.send_message(message.chat.id, 'Что будем делать?')
+        bot.register_next_step_handler(msg, next_step_func)
+
+
 @bot.message_handler(func=lambda message: True, content_types=["text"])
 def message_from_users(message):
     user_id = message.from_user.id
@@ -55,6 +74,10 @@ def redirect_message():
     update = telebot.types.Update.de_json(json_string)
     bot.process_new_updates([update])
     return "!", 200
+
+
+def next_step_func():
+    pass
 
 
 if __name__ == "__main__":
