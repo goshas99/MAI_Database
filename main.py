@@ -38,8 +38,8 @@ def start(message):
 
 @bot.message_handler(commands=["help"])
 def start(message: telebot.types.Message):
-    user_id = message.from_user.id
-    bot.reply_to((message, "КАКАЯ-ТО ПОЛЕЗНАЯ ИНФОРМАЦИЯ"))
+    username = message.from_user.username
+    bot.reply_to((message, f"КАКАЯ-ТО ПОЛЕЗНАЯ ИНФОРМАЦИЯ для {username}"))
 
 
 @bot.message_handler(func=lambda message: True, content_types=["text"])
