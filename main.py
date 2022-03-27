@@ -45,11 +45,14 @@ def _help_(message):
 
 @bot.message_handler(commands="go")
 def start_auth(message):
+    user_id = message.from_user.id
     msg = bot.send_message(message.chat.id, 'Введите свой логин и пароль для доступа к БД')
     bot.register_next_step_handler(msg, auth)
+    update_messages_count(user_id)
 
 
 def auth(message):
+    user_id = message.from_user.id
     data = message.text.split()
     check = db_object.Auth_information({
         'Login': str(data['Login']),
@@ -60,6 +63,7 @@ def auth(message):
     else:
         msg = bot.send_message(message.chat.id, 'Что будем делать?')
         bot.register_next_step_handler(msg, next_step_func)
+    update_messages_count(user_id)
 
 
 @bot.message_handler(func=lambda message: True, content_types=["text"])
