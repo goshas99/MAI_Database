@@ -36,7 +36,7 @@ def start(message):
     update_messages_count(user_id)
 
 
-@bot.message_handler(commands=["help"])
+@bot.message_handler(func=lambda message: True, content_types=["text"])
 def start(message: telebot.types.Message):
     username = message.from_user.username
     bot.reply_to((message, f"КАКАЯ-ТО ПОЛЕЗНАЯ ИНФОРМАЦИЯ для {username}"))
