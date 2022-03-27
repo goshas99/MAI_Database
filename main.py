@@ -37,8 +37,7 @@ def start(message):
 
 
 @bot.message_handler(commands="help")
-def start(message):
-    user_id = message.from_user.id
+def start(message: telebot.types.Message):
     bot.reply_to((message, "КАКАЯ-ТО ПОЛЕЗНАЯ ИНФОРМАЦИЯ"))
 
 
