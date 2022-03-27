@@ -36,7 +36,7 @@ def start(message):
     update_messages_count(user_id)
 
 
-@bot.message_handler(commands=["help"])
+@bot.message_handler(commands="help")
 def start(message):
     user_id = message.from_user.id
     bot.reply_to((message, "КАКАЯ-ТО ПОЛЕЗНАЯ ИНФОРМАЦИЯ"))
